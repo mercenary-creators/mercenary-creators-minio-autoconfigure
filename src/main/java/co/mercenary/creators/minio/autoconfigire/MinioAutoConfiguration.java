@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 
-import co.mercenary.creators.minio.MinioOperationException;
 import co.mercenary.creators.minio.MinioTemplate;
 
 @Configuration
@@ -42,7 +41,7 @@ public class MinioAutoConfiguration
     @NonNull
     @ConditionalOnProperty(name = "mercenary.minio.server-url")
     @ConditionalOnMissingBean(value = MinioTemplate.class, name = "minioTemplate")
-    public MinioTemplate minioTemplate() throws MinioOperationException
+    public MinioTemplate minioTemplate()
     {
         return new MinioTemplate(m_properties.getServerUrl(), m_properties.getAccessKey(), m_properties.getSecretKey(), m_properties.getUseRegion());
     }
