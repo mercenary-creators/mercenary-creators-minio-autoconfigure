@@ -24,58 +24,58 @@ import org.springframework.lang.Nullable;
 public class MinioConfigurationProperties
 {
     @NonNull
-    private String m_server_url;
+    private String server_url;
 
     @Nullable
-    private String m_access_key;
+    private String access_key;
 
     @Nullable
-    private String m_secret_key;
+    private String secret_key;
 
     @Nullable
-    private String m_use_region;
+    private String use_region;
 
     public void setServerUrl(@NonNull final String server)
     {
-        m_server_url = server;
+        server_url = server;
     }
 
     @NonNull
     public String getServerUrl()
     {
-        return m_server_url;
+        return server_url;
     }
 
     public void setAccessKey(@Nullable final String access)
     {
-        m_access_key = access;
+        access_key = access;
     }
 
     @Nullable
     public String getAccessKey()
     {
-        return m_access_key;
+        return access_key;
     }
 
     public void setSecretKey(@Nullable final String secret)
     {
-        m_secret_key = secret;
+        secret_key = secret;
     }
 
     @Nullable
     public String getSecretKey()
     {
-        return m_secret_key;
+        return secret_key;
     }
 
     public void setUseRegion(@Nullable final String region)
     {
-        m_use_region = region;
+        use_region = region;
     }
 
     @Nullable
     public String getUseRegion()
     {
-        return m_use_region;
+        return use_region;
     }
 }

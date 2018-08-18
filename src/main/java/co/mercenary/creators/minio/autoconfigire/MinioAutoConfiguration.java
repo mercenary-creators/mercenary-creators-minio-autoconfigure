@@ -30,11 +30,11 @@ import co.mercenary.creators.minio.MinioTemplate;
 public class MinioAutoConfiguration
 {
     @NonNull
-    private final MinioConfigurationProperties m_properties;
+    private final MinioConfigurationProperties properties;
 
     public MinioAutoConfiguration(@NonNull final MinioConfigurationProperties properties)
     {
-        m_properties = properties;
+        this.properties = properties;
     }
 
     @Bean
@@ -43,6 +43,6 @@ public class MinioAutoConfiguration
     @ConditionalOnMissingBean(value = MinioTemplate.class, name = "minioTemplate")
     public MinioTemplate minioTemplate()
     {
-        return new MinioTemplate(m_properties.getServerUrl(), m_properties.getAccessKey(), m_properties.getSecretKey(), m_properties.getUseRegion());
+        return new MinioTemplate(properties.getServerUrl(), properties.getAccessKey(), properties.getSecretKey(), properties.getUseRegion());
     }
 }
