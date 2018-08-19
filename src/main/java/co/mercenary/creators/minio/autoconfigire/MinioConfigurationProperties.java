@@ -20,10 +20,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-@ConfigurationProperties(prefix = "mercenary.minio")
+import co.mercenary.creators.minio.util.MinioUtils;
+
+@ConfigurationProperties(prefix = "minio")
 public class MinioConfigurationProperties
 {
-    @NonNull
     private String server_url;
 
     @Nullable
@@ -37,7 +38,7 @@ public class MinioConfigurationProperties
 
     public void setServerUrl(@NonNull final String server)
     {
-        server_url = server;
+        server_url = MinioUtils.requireNonNull(server);
     }
 
     @NonNull

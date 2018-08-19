@@ -39,7 +39,7 @@ public class MinioAutoConfiguration
 
     @Bean
     @NonNull
-    @ConditionalOnProperty(name = "mercenary.minio.server-url")
+    @ConditionalOnProperty(name = "minio.server-url")
     @ConditionalOnMissingBean(value = MinioTemplate.class, name = "minioTemplate")
     public MinioTemplate minioTemplate()
     {

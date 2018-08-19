@@ -38,8 +38,8 @@ import java.net.InetAddress
 import org.ajoberstar.grgit.Grgit
 
 apply plugin: 'pmd'
-apply plugin: 'maven'
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'jacoco'
 apply plugin: 'signing'
 apply plugin: 'eclipse'
@@ -57,7 +57,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '0.0.8-SNAPSHOT'
+version = '0.0.9-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -88,6 +88,49 @@ compileJava.dependsOn(processResources)
 
 eclipse { classpath { downloadJavadoc = true } }
 
+checkstyle {
+    toolVersion = '7.7'
+    ignoreFailures = true
+}
+
+tasks.withType(Checkstyle) { source 'src/main' }
+
+pmd {
+    ignoreFailures = true
+    toolVersion = '5.6.1'
+    ruleSets = [
+        'java-basic',
+        'java-braces',
+        'java-empty',
+        'java-optimizations',
+        'java-unusedcode'
+    ]
+}
+
+findbugs {
+    ignoreFailures = true
+    toolVersion = '3.0.1'
+    effort = 'max'
+    excludeFilter = project.file('config/findbugs/filter.xml')
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+dependencyCheck {
+    failOnError = false
+    outputDirectory = "${buildDir}/reports/cve"
+    suppressionFile = project.file('config/cve/suppress.xml')
+}
+
+task checkCodeQuality { doLast { println ':checkCodeQuality-done' } }
+
+checkCodeQuality.dependsOn checkstyleMain,pmdMain,findbugsMain,dependencyCheckAnalyze
+
 repositories {
     mavenCentral()
     maven {
@@ -102,7 +145,7 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '0.0.8-SNAPSHOT')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '0.0.9-SNAPSHOT')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')
