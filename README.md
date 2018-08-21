@@ -41,6 +41,12 @@ CVE Dependency Check URL:
 
 http://docs.themodernway.com/docs/reports/mercenary-creators-minio-autoconfigure/cve/dependency-check-report.html
 
+SonarQube URL:
+
+https://sonarcloud.io/dashboard?id=co.mercenary-creators%3Amercenary-creators-minio-autoconfigure
+
+![alt SonarQube](https://sonarcloud.io/api/project_badges/measure?project=co.mercenary-creators%3Amercenary-creators-minio-autoconfigure&metric=alert_status "SonarQube")
+
 License:
 
 Copyright (c) 2018, Mercenary Creators Company. All rights reserved.
