@@ -33,9 +33,6 @@ public class MinioConfigurationProperties
     @Nullable
     private String secret_key;
 
-    @Nullable
-    private String use_region;
-
     public void setServerUrl(@NonNull final String server)
     {
         server_url = MinioUtils.requireNonNull(server);
@@ -67,16 +64,5 @@ public class MinioConfigurationProperties
     public String getSecretKey()
     {
         return secret_key;
-    }
-
-    public void setUseRegion(@Nullable final String region)
-    {
-        use_region = region;
-    }
-
-    @Nullable
-    public String getUseRegion()
-    {
-        return use_region;
     }
 }
