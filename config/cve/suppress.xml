@@ -24,4 +24,18 @@
 		</gav>
 		<cve>CVE-2018-1000538</cve>
 	</suppress>
+	<suppress>
+		<notes><![CDATA[
+   file name: minio-5.0.0.jar
+   ]]></notes>
+		<gav regex="true">^io\.minio:minio:.*$</gav>
+		<cpe>cpe:/a:minio:minio</cpe>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+   file name: minio-5.0.0.jar
+   ]]></notes>
+		<gav regex="true">^io\.minio:minio:.*$</gav>
+		<cve>CVE-2018-1000538</cve>
+	</suppress>
 </suppressions>
