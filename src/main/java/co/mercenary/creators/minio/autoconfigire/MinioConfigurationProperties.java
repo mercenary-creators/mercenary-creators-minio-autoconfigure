@@ -33,6 +33,9 @@ public class MinioConfigurationProperties
     @Nullable
     private String secret_key;
 
+    @Nullable
+    private String aws_region;
+
     public void setServerUrl(@NonNull final String server)
     {
         server_url = MinioUtils.requireNonNull(server);
@@ -64,5 +67,16 @@ public class MinioConfigurationProperties
     public String getSecretKey()
     {
         return secret_key;
+    }
+
+    public void setAwsRegion(@Nullable final String region)
+    {
+        aws_region = region;
+    }
+
+    @Nullable
+    public String getAwsRegion()
+    {
+        return aws_region;
     }
 }

@@ -43,6 +43,6 @@ public class MinioAutoConfiguration
     @ConditionalOnMissingBean(value = MinioTemplate.class, name = "minioTemplate")
     public MinioTemplate minioTemplate()
     {
-        return new MinioTemplate(properties.getServerUrl(), properties.getAccessKey(), properties.getSecretKey());
+        return new MinioTemplate(properties.getServerUrl(), properties.getAccessKey(), properties.getSecretKey(), properties.getAwsRegion());
     }
 }
