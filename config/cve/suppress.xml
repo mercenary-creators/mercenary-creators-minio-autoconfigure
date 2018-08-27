@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-   <suppress>
-      <notes><![CDATA[
+<suppressions
+	xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+	<suppress>
+		<notes><![CDATA[
       file name: AppleJavaExtensions-1.4.jar
       ]]></notes>
-      <gav regex="true">^com\.apple:AppleJavaExtensions:.*$</gav>
-      <cpe>cpe:/a:apple:java</cpe>
-   </suppress>
+		<gav regex="true">^com\.apple:AppleJavaExtensions:.*$</gav>
+		<cpe>cpe:/a:apple:java</cpe>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+   file name: mercenary-creators-minio-1.0.2-RELEASE.jar
+   ]]></notes>
+		<gav regex="true">^co\.mercenary-creators:mercenary-creators-minio:.*$
+		</gav>
+		<cpe>cpe:/a:minio:minio</cpe>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+   file name: mercenary-creators-minio-1.0.2-RELEASE.jar
+   ]]></notes>
+		<gav regex="true">^co\.mercenary-creators:mercenary-creators-minio:.*$
+		</gav>
+		<cve>CVE-2018-1000538</cve>
+	</suppress>
 </suppressions>
