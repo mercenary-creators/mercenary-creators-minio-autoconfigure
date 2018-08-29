@@ -57,7 +57,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '1.0.2-RELEASE'
+version = '1.0.3-RELEASE'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -87,6 +87,34 @@ task javadocJar(type: Jar, dependsOn: doJavaDocs) {
 compileJava.dependsOn(processResources)
 
 eclipse { classpath { downloadJavadoc = true } }
+
+task codeCoverage { doLast { println ':codeCoverage-done' } }
+
+codeCoverage.dependsOn jacocoTestReport
+
+jacocoTestReport {
+    reports {
+        csv {
+            enabled true
+            destination project.file("${buildDir}/reports/jacoco/coverage-${getBuildModuleVersion()}.csv")
+        }
+        xml.enabled false
+        html.destination project.file("${buildDir}/reports/coverage")
+    }
+}
+
+jacocoTestReport.dependsOn test
+
+test {
+    minHeapSize = '2048m'
+    maxHeapSize = '2048m'
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+    jacoco {
+        append = false
+        destinationFile = project.file("${buildDir}/jacoco/testing.exec")
+    }
+}
 
 checkstyle {
     toolVersion = '7.7'
@@ -129,7 +157,7 @@ dependencyCheck {
 
 task checkCodeQuality { doLast { println ':checkCodeQuality-done' } }
 
-checkCodeQuality.dependsOn checkstyleMain,pmdMain,findbugsMain,dependencyCheckAnalyze
+checkCodeQuality.dependsOn codeCoverage,checkstyleMain,pmdMain,findbugsMain,dependencyCheckAnalyze
 
 repositories {
     mavenCentral()
@@ -145,12 +173,17 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.2-RELEASE')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.3-RELEASE')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     runtime('org.springframework.boot:spring-boot-devtools')
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+		exclude(group: 'junit', module: 'junit')
+	}
+ 	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0')
+    testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.2.0')
 }
 
 artifacts {

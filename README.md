@@ -1,7 +1,7 @@
 Mercenary Creators Minio Autoconfigure
 ======
 
-![<TMW>](http://docs.themodernway.com/tmw4.jpg)
+![<MERC>](http://docs.themodernway.com/merc5.png)
 
 Downloading artifacts
 
@@ -12,18 +12,26 @@ Maven:
 <dependency>
   <groupId>co.mercenary-creators</groupId>
   <artifactId>mercenary-creators-minio-autoconfigure</artifactId>
-  <version>1.0.2-RELEASE</version>
+  <version>1.0.3-RELEASE</version>
 </dependency>
 ```
 Gradle:
 ```
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio-autoconfigure', version: '1.0.2-RELEASE')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio-autoconfigure', version: '1.0.3-RELEASE')
 }
 ```
 Javadoc URL:
 
 http://docs.themodernway.com/docs/javadoc/mercenary-creators-minio-autoconfigure/
+
+Tests URL:
+
+http://docs.themodernway.com/docs/reports/mercenary-creators-minio-autoconfigure/tests/test/
+
+Code Coverage URL:
+
+http://docs.themodernway.com/docs/reports/mercenary-creators-minio-autoconfigure/coverage/
 
 Check Style URL:
 
