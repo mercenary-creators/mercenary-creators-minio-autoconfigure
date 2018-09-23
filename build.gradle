@@ -57,7 +57,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '1.0.4-RELEASE'
+version = '1.0.5-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -173,7 +173,7 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.4-RELEASE')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.5-SNAPSHOT')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')
@@ -182,8 +182,8 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test') {
 		exclude(group: 'junit', module: 'junit')
 	}
- 	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.0')
-    testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.0')
+ 	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1')
+    testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.1')
 }
 
 artifacts {
