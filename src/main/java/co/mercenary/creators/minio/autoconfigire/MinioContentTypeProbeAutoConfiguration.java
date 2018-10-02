@@ -30,7 +30,7 @@ import co.mercenary.creators.minio.content.tika.MinioContentTypeProbeTikaAdapter
 @Configuration
 public class MinioContentTypeProbeAutoConfiguration
 {
-    public MinioContentTypeProbeAutoConfiguration()
+    protected MinioContentTypeProbeAutoConfiguration()
     {
         super();
     }
