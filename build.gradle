@@ -16,17 +16,23 @@
 
 buildscript {
 	ext {
-        springBootVersion = '2.0.5.RELEASE'
+         springBootVersion = '2.1.0.M4'
     }
     repositories {
         mavenCentral()
+        maven {
+        	url 'https://repo.spring.io/snapshot'
+        }
+        maven {
+        	url 'https://repo.spring.io/milestone'
+        }
     }
     dependencies {
         classpath(group: 'org.ajoberstar', name: 'grgit', version: '1.7.2')
         classpath(group: 'commons-codec', name: 'commons-codec', version: '1.11')
         classpath(group: 'commons-logging', name: 'commons-logging', version: '1.2')
+        classpath(group: 'org.owasp', name: 'dependency-check-gradle', version: '3.3.2')
         classpath(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6')
-        classpath(group: 'org.owasp', name: 'dependency-check-gradle', version: '3.3.1')
         classpath(group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '2.6.2')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
@@ -57,7 +63,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '1.0.5-SNAPSHOT'
+version = '1.0.6-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -164,6 +170,12 @@ repositories {
     maven {
     	url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
+    maven {
+        url 'https://repo.spring.io/snapshot'
+    }
+    maven {
+        url 'https://repo.spring.io/milestone'
+    }
 }
 
 jar.enabled = true
@@ -173,15 +185,21 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.5-SNAPSHOT')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.6-SNAPSHOT')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')
+    compileOnly(group: 'org.apache.tika', name: 'tika-core', version: '1.19')
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test') {
 		exclude(group: 'junit', module: 'junit')
 	}
+	testCompile(group: 'org.apache.tika', name: 'tika-core', version: '1.19')
+	testCompile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25')
+    testCompile(group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25')
+    testCompile(group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.25')
+    testCompile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3')
  	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1')
     testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.1')
 }

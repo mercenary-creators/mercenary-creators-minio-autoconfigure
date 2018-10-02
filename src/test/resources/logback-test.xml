@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<!-- 
 /*
  * Copyright (c) 2018, Mercenary Creators Company. All rights reserved.
  *
@@ -13,25 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package co.mercenary.creators.minio.autoconfigire.test;
-
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
-import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTest;
-import co.mercenary.creators.minio.data.MinioItem;
-
-public class HasItemsTest extends AbstractMinioAutoConfigureTest
-{
-    @Test
-    public void test() throws Exception
-    {
-        final List<MinioItem> list = toList(getMinioOperations().getItems("root", false));
-
-        list.forEach(item -> info(() -> toJSONString(item)));
-
-        assertFalse(list.isEmpty(), () -> "items is empty.");
-    }
-}
+-->
+<configuration>
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<Pattern><![CDATA[[%d{"yyyy-MM-dd HH:mm:ss,SSS z","UTC"}] [%p] [%c] [TEST-MINIO-AUTOCONFIGURE] - %m%n]]></Pattern>
+			</layout>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

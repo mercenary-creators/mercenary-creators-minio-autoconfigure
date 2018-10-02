@@ -20,107 +20,118 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import co.mercenary.creators.minio.MinioOperations;
 import co.mercenary.creators.minio.MinioTemplate;
 import co.mercenary.creators.minio.autoconfigire.MinioAutoConfiguration;
 import co.mercenary.creators.minio.errors.MinioDataException;
 import co.mercenary.creators.minio.util.MinioUtils;
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
+@ContextConfiguration("classpath:/test-context.xml")
 @SpringBootTest(classes = MinioAutoConfiguration.class)
-@TestPropertySource("file:/opt/development/properties/mercenary-creators-minio/minio-test.properties")
-public class AbstractAutoConfigureTests
+@TestPropertySource(locations = "file:/opt/development/properties/mercenary-creators-minio/minio-test.properties")
+public abstract class AbstractMinioAutoConfigureTest
 {
     @NonNull
-    private final Log     logger = LogFactory.getLog(getClass());
+    private final Logger  logger = LoggingOps.getLogger(getClass());
 
     @Nullable
     @Autowired
     private MinioTemplate minioTemplate;
 
     @Nullable
-    protected MinioTemplate getMinioTemplate()
+    protected MinioOperations getMinioOperations()
     {
         return minioTemplate;
     }
 
     @NonNull
-    protected Log getLogger()
+    protected Logger getLogger()
     {
         return logger;
     }
 
-    protected void info(@NonNull final Supplier<String> message)
+    @BeforeEach
+    protected void doBeforeEachTest()
+    {
+        info(() -> getMinioOperations().getContentTypeProbe().getClass().getName());
+    }
+
+    protected void info(@NonNull final Supplier<?> message)
     {
         if (getLogger().isInfoEnabled())
         {
-            getLogger().info(message.get());
+            getLogger().info(LoggingOps.MERCENARY_MARKER, message.get().toString());
         }
     }
 
-    protected void info(@NonNull final Supplier<String> message, @NonNull final Throwable cause)
+    protected void info(@NonNull final Supplier<?> message, @NonNull final Throwable cause)
     {
         if (getLogger().isInfoEnabled())
         {
-            getLogger().info(message.get(), cause);
+            getLogger().info(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
         }
     }
 
-    protected void warn(@NonNull final Supplier<String> message)
+    protected void warn(@NonNull final Supplier<?> message)
     {
         if (getLogger().isWarnEnabled())
         {
-            getLogger().warn(message.get());
+            getLogger().warn(LoggingOps.MERCENARY_MARKER, message.get().toString());
         }
     }
 
-    protected void warn(@NonNull final Supplier<String> message, @NonNull final Throwable cause)
+    protected void warn(@NonNull final Supplier<?> message, @NonNull final Throwable cause)
     {
         if (getLogger().isWarnEnabled())
         {
-            getLogger().warn(message.get(), cause);
+            getLogger().warn(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
         }
     }
 
-    protected void debug(@NonNull final Supplier<String> message)
+    protected void debug(@NonNull final Supplier<?> message)
     {
         if (getLogger().isDebugEnabled())
         {
-            getLogger().debug(message.get());
+            getLogger().debug(LoggingOps.MERCENARY_MARKER, message.get().toString());
         }
     }
 
-    protected void debug(@NonNull final Supplier<String> message, @NonNull final Throwable cause)
+    protected void debug(@NonNull final Supplier<?> message, @NonNull final Throwable cause)
     {
         if (getLogger().isDebugEnabled())
         {
-            getLogger().debug(message.get(), cause);
+            getLogger().debug(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
         }
     }
 
-    protected void error(@NonNull final Supplier<String> message)
+    protected void error(@NonNull final Supplier<?> message)
     {
         if (getLogger().isErrorEnabled())
         {
-            getLogger().error(message.get());
+            getLogger().error(LoggingOps.MERCENARY_MARKER, message.get().toString());
         }
     }
 
-    protected void error(@NonNull final Supplier<String> message, @NonNull final Throwable cause)
+    protected void error(@NonNull final Supplier<?> message, @NonNull final Throwable cause)
     {
         if (getLogger().isErrorEnabled())
         {
-            getLogger().error(message.get(), cause);
+            getLogger().error(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
         }
     }
 
@@ -169,18 +180,18 @@ public class AbstractAutoConfigureTests
         }
     }
 
-    protected void assertEquals(@Nullable final Object expected, @Nullable final Object actual, @NonNull final Supplier<String> message)
+    protected void assertEquals(@Nullable final Object expected, @Nullable final Object actual, @NonNull final Supplier<?> message)
     {
-        Assertions.assertEquals(expected, actual, message);
+        Assertions.assertEquals(expected, actual, () -> message.get().toString());
     }
 
-    protected void assertTrue(final boolean condition, @NonNull final Supplier<String> message)
+    protected void assertTrue(final boolean condition, @NonNull final Supplier<?> message)
     {
-        Assertions.assertTrue(condition, message);
+        Assertions.assertTrue(condition, () -> message.get().toString());
     }
 
-    protected void assertFalse(final boolean condition, @NonNull final Supplier<String> message)
+    protected void assertFalse(final boolean condition, @NonNull final Supplier<?> message)
     {
-        Assertions.assertFalse(condition, message);
+        Assertions.assertFalse(condition, () -> message.get().toString());
     }
 }

@@ -19,17 +19,18 @@ package co.mercenary.creators.minio.autoconfigire.test;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 
-import co.mercenary.creators.minio.autoconfigire.util.AbstractAutoConfigureTests;
+import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTest;
 import co.mercenary.creators.minio.data.MinioBucket;
-import co.mercenary.creators.minio.errors.MinioOperationException;
 
-public class HasBucketsTest extends AbstractAutoConfigureTests
+@TestPropertySource(properties = "minio.content-type-probe.name=tika")
+public class HasBucketsTest extends AbstractMinioAutoConfigureTest
 {
     @Test
-    public void test() throws MinioOperationException
+    public void test() throws Exception
     {
-        final List<MinioBucket> list = toList(getMinioTemplate().getBuckets());
+        final List<MinioBucket> list = toList(getMinioOperations().getBuckets());
 
         list.forEach(item -> info(() -> toJSONString(item)));
 

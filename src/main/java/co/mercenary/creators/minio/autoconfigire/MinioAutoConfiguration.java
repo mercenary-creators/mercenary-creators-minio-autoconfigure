@@ -21,12 +21,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.lang.NonNull;
 
 import co.mercenary.creators.minio.MinioTemplate;
 
 @Configuration
 @EnableConfigurationProperties({ MinioConfigurationProperties.class })
+@Import({ MinioContentTypeProbeAutoConfiguration.class, MinioContentTypeProbeAutoConfiguration.TikaProbeConfiguration.class, MinioContentTypeProbeAutoConfiguration.FileProbeConfiguration.class })
 public class MinioAutoConfiguration
 {
     @NonNull
