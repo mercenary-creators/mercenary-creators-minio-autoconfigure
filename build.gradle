@@ -63,7 +63,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '1.0.7-SNAPSHOT'
+version = '1.0.8-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -185,7 +185,7 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.7-SNAPSHOT')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.8-SNAPSHOT')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')

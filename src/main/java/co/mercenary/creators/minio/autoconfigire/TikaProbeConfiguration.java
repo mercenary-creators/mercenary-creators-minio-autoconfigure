@@ -24,41 +24,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 
 import co.mercenary.creators.minio.content.MinioContentTypeProbe;
-import co.mercenary.creators.minio.content.MinioContentTypeProbeFileTypeMapAdapter;
 import co.mercenary.creators.minio.content.tika.MinioContentTypeProbeTikaAdapter;
 
 @Configuration
-public class MinioContentTypeProbeAutoConfiguration
+public class TikaProbeConfiguration
 {
-    protected MinioContentTypeProbeAutoConfiguration()
+    @Bean
+    @NonNull
+    @ConditionalOnClass(name = "org.apache.tika.Tika")
+    @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
+    @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "tika")
+    public MinioContentTypeProbe minioTikaContentTypeProbe()
     {
-        super();
-    }
-
-    @Configuration
-    public static class TikaProbeConfiguration
-    {
-        @Bean
-        @NonNull
-        @ConditionalOnClass(name = "org.apache.tika.Tika")
-        @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
-        @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "tika")
-        public MinioContentTypeProbe minioTikaContentTypeProbe()
-        {
-            return new MinioContentTypeProbeTikaAdapter();
-        }
-    }
-
-    @Configuration
-    public static class FileProbeConfiguration
-    {
-        @Bean
-        @NonNull
-        @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
-        @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "file", matchIfMissing = true)
-        public MinioContentTypeProbe minioFileContentTypeProbe()
-        {
-            return new MinioContentTypeProbeFileTypeMapAdapter();
-        }
+        return new MinioContentTypeProbeTikaAdapter();
     }
 }

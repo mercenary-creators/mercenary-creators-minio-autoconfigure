@@ -18,34 +18,22 @@ package co.mercenary.creators.minio.autoconfigire;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.lang.NonNull;
 
-import co.mercenary.creators.minio.MinioTemplate;
-import co.mercenary.creators.minio.util.MinioUtils;
+import co.mercenary.creators.minio.content.MinioContentTypeProbe;
+import co.mercenary.creators.minio.content.MinioContentTypeProbeFileTypeMapAdapter;
 
 @Configuration
-@EnableConfigurationProperties({ MinioConfigurationProperties.class })
-@Import({ TikaProbeConfiguration.class, FileProbeConfiguration.class })
-public class MinioAutoConfiguration
+public class FileProbeConfiguration
 {
-    @NonNull
-    private final MinioConfigurationProperties properties;
-
-    public MinioAutoConfiguration(@NonNull final MinioConfigurationProperties properties)
-    {
-        this.properties = MinioUtils.requireNonNull(properties);
-    }
-
     @Bean
     @NonNull
-    @ConditionalOnProperty(name = "minio.server-url")
-    @ConditionalOnMissingBean(value = MinioTemplate.class, name = "minioTemplate")
-    public MinioTemplate minioTemplate()
+    @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
+    @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "file", matchIfMissing = true)
+    public MinioContentTypeProbe minioFileContentTypeProbe()
     {
-        return new MinioTemplate(properties.getServerUrl(), properties.getAccessKey(), properties.getSecretKey(), properties.getAwsRegion());
+        return new MinioContentTypeProbeFileTypeMapAdapter();
     }
 }
