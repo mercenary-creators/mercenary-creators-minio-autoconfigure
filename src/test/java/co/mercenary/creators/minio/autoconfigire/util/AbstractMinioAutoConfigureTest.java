@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,7 @@ import co.mercenary.creators.minio.MinioTemplate;
 import co.mercenary.creators.minio.autoconfigire.MinioAutoConfiguration;
 import co.mercenary.creators.minio.errors.MinioDataException;
 import co.mercenary.creators.minio.util.MinioUtils;
+import co.mercenary.creators.minio.util.NanoTicker;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -47,11 +49,14 @@ import co.mercenary.creators.minio.util.MinioUtils;
 public abstract class AbstractMinioAutoConfigureTest
 {
     @NonNull
-    private final Logger  logger = LoggingOps.getLogger(getClass());
+    private final NanoTicker ticker = new NanoTicker();
+
+    @NonNull
+    private final Logger     logger = LoggingOps.getLogger(getClass());
 
     @Nullable
     @Autowired
-    private MinioTemplate minioTemplate;
+    private MinioTemplate    minioTemplate;
 
     @Nullable
     protected MinioOperations getMinioOperations()
@@ -69,6 +74,18 @@ public abstract class AbstractMinioAutoConfigureTest
     protected void doBeforeEachTest()
     {
         info(() -> getMinioOperations().getContentTypeProbe().getClass().getName());
+
+        ticker.reset();
+    }
+
+    @AfterEach
+    protected void doAfterEachTest()
+    {
+        final String value = ticker.toString();
+
+        info(() -> value);
+
+        ticker.reset();
     }
 
     protected void info(@NonNull final Supplier<?> message)

@@ -63,7 +63,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '1.0.8-SNAPSHOT'
+version = '1.0.9-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava
@@ -185,23 +185,23 @@ jar.enabled = true
 configurations.archives.artifacts.removeIf { !it.archiveTask.is(distZip) }
 
 dependencies {
-    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.8-SNAPSHOT')
+    compile(group: 'co.mercenary-creators', name: 'mercenary-creators-minio', version: '1.0.9-SNAPSHOT')
     compile('org.springframework.boot:spring-boot-autoconfigure')
     compile(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON_DATABIND_VERSION}")
     compile(group: 'joda-time', name: 'joda-time', version: '2.10')
-    compileOnly(group: 'org.apache.tika', name: 'tika-core', version: '1.19')
+    compileOnly(group: 'org.apache.tika', name: 'tika-core', version: '1.19.1')
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test') {
 		exclude(group: 'junit', module: 'junit')
 	}
-	testCompile(group: 'org.apache.tika', name: 'tika-core', version: '1.19')
+	testCompile(group: 'org.apache.tika', name: 'tika-core', version: '1.19.1')
 	testCompile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25')
-    testCompile(group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25')
-    testCompile(group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.25')
-    testCompile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3')
- 	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1')
-    testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.1')
+	testCompile(group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.25')
+	testCompile(group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.25')
+	testCompile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3')
+	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1')
+	testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.1')
 }
 
 artifacts {
