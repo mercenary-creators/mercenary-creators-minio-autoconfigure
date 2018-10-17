@@ -38,6 +38,7 @@ import co.mercenary.creators.minio.MinioOperations;
 import co.mercenary.creators.minio.MinioTemplate;
 import co.mercenary.creators.minio.autoconfigire.MinioAutoConfiguration;
 import co.mercenary.creators.minio.errors.MinioDataException;
+import co.mercenary.creators.minio.json.JSONUtils;
 import co.mercenary.creators.minio.util.MinioUtils;
 import co.mercenary.creators.minio.util.NanoTicker;
 
@@ -176,7 +177,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         try
         {
-            return MinioUtils.toJSONString(value, pretty);
+            return JSONUtils.toJSONString(value, pretty);
         }
         catch (final MinioDataException e)
         {
@@ -185,11 +186,11 @@ public abstract class AbstractMinioAutoConfigureTest
     }
 
     @NonNull
-    protected <T> T toJSONObject(@NonNull final CharSequence value, @NonNull final Class<T> type)
+    protected <T> T toJSONObject(@NonNull final String value, @NonNull final Class<T> type)
     {
         try
         {
-            return MinioUtils.toJSONObject(value, type);
+            return JSONUtils.toJSONObject(value, type);
         }
         catch (final MinioDataException e)
         {
