@@ -30,7 +30,7 @@ public class HasBucketsTest extends AbstractMinioAutoConfigureTest
     @Test
     public void test() throws Exception
     {
-        final List<MinioBucket> list = toList(getMinioOperations().getBuckets());
+        final List<MinioBucket> list = toList(getMinioOperations().findBuckets());
 
         list.forEach(item -> info(() -> toJSONString(item)));
 

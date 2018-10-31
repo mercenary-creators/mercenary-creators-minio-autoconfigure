@@ -28,7 +28,7 @@ public class HasItemsTest extends AbstractMinioAutoConfigureTest
     @Test
     public void test() throws Exception
     {
-        final List<MinioItem> list = toList(getMinioOperations().getItems("root", false));
+        final List<MinioItem> list = toList(getMinioOperations().findItems("root", false));
 
         list.forEach(item -> info(() -> toJSONString(item)));
 
