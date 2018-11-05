@@ -31,7 +31,7 @@ public class FileProbeConfiguration
     @Bean
     @NonNull
     @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
-    @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "file", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "co.mercenary.creators.minio.content-type-probe", name = "name", havingValue = "file", matchIfMissing = true)
     public MinioContentTypeProbe minioFileContentTypeProbe()
     {
         return new MinioContentTypeProbeFileTypeMapAdapter();

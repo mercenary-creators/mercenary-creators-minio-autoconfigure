@@ -33,7 +33,7 @@ public class TikaProbeConfiguration
     @NonNull
     @ConditionalOnClass(name = "org.apache.tika.Tika")
     @ConditionalOnMissingBean(value = MinioContentTypeProbe.class)
-    @ConditionalOnProperty(prefix = "minio.content-type-probe", name = "name", havingValue = "tika")
+    @ConditionalOnProperty(prefix = "co.mercenary.creators.minio.content-type-probe", name = "name", havingValue = "tika")
     public MinioContentTypeProbe minioTikaContentTypeProbe()
     {
         return new MinioContentTypeProbeTikaAdapter();

@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.minio.autoconfigire.test;
+package co.mercenary.creators.minio.autoconfigire.test
 
-import java.util.List;
+import org.junit.jupiter.api.Test
+import co.mercenary.creators.minio.kotlin.*
+import co.mercenary.creators.minio.autoconfigire.test.util.KAbstractMinioAutoConfigureTests
 
-import org.junit.jupiter.api.Test;
-
-import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTests;
-import co.mercenary.creators.minio.data.MinioItem;
-
-public class HasItemsTest extends AbstractMinioAutoConfigureTests
-{
-    @Test
-    void test() throws Exception
-    {
-        final List<MinioItem> list = forInfo(getMinio().findItems("root", false));
-        assertFalse(list.isEmpty(), isEmptyMessage("items"));
-    }
+class KItemTest : KAbstractMinioAutoConfigureTests() {
+	@Test
+	fun test() {
+		val time = timer
+		val look = minio.item("root", "zips.json")
+		assertTrue(look.exists(), getMessage("look.exists()."))
+		val item = look.get()
+		info { time }
+		info { item }
+		info { time }
+		assertTrue(item.exists(), getMessage("item.exists()."))
+		info { time }
+	}
 }

@@ -17,6 +17,7 @@
 package co.mercenary.creators.minio.autoconfigire.util;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import org.slf4j.Marker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.lang.NonNull;
@@ -39,30 +41,41 @@ import co.mercenary.creators.minio.MinioTemplate;
 import co.mercenary.creators.minio.autoconfigire.MinioAutoConfiguration;
 import co.mercenary.creators.minio.errors.MinioDataException;
 import co.mercenary.creators.minio.json.JSONUtils;
+import co.mercenary.creators.minio.json.WithJSONOperations;
 import co.mercenary.creators.minio.util.MinioUtils;
 import co.mercenary.creators.minio.util.NanoTicker;
+import co.mercenary.creators.minio.util.Ticker;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:/test-context.xml")
 @SpringBootTest(classes = MinioAutoConfiguration.class)
 @TestPropertySource(locations = "file:/opt/development/properties/mercenary-creators-minio/minio-test.properties")
-public abstract class AbstractMinioAutoConfigureTest
+public abstract class AbstractMinioAutoConfigureTests
 {
     @NonNull
-    private final NanoTicker ticker = new NanoTicker();
+    private final Ticker  ticker = new NanoTicker();
 
     @NonNull
-    private final Logger     logger = LoggingOps.getLogger(getClass());
+    private final Marker  marker = LoggingOps.getMarker();
+
+    @NonNull
+    private final Logger  logger = LoggingOps.getLogger(getClass());
 
     @Nullable
     @Autowired
-    private MinioTemplate    minioTemplate;
+    private MinioTemplate minioTemplate;
 
-    @Nullable
-    protected MinioOperations getMinioOperations()
+    @NonNull
+    protected Optional<MinioTemplate> getTemplate()
     {
-        return minioTemplate;
+        return MinioUtils.toOptional(minioTemplate);
+    }
+
+    @NonNull
+    protected MinioOperations getMinio()
+    {
+        return getTemplate().orElseThrow(() -> new AssertionError("getTemplate() null template."));
     }
 
     @NonNull
@@ -71,10 +84,22 @@ public abstract class AbstractMinioAutoConfigureTest
         return logger;
     }
 
+    @NonNull
+    protected Marker getMarker()
+    {
+        return marker;
+    }
+
+    @NonNull
+    protected Ticker getTimer()
+    {
+        return new NanoTicker();
+    }
+
     @BeforeEach
     protected void doBeforeEachTest()
     {
-        info(() -> getMinioOperations().getContentTypeProbe().getClass().getName());
+        info(() -> getMinio().getContentTypeProbe().getClass().getName());
 
         ticker.reset();
     }
@@ -83,17 +108,33 @@ public abstract class AbstractMinioAutoConfigureTest
     protected void doAfterEachTest()
     {
         final String value = ticker.toString();
-
         info(() -> value);
-
         ticker.reset();
+    }
+
+    @NonNull
+    protected Supplier<String> getMessage(@NonNull final String message)
+    {
+        return () -> message;
+    }
+
+    @NonNull
+    protected Supplier<String> isEmptyMessage(@NonNull final String message)
+    {
+        return isEmptyMessage(() -> message);
+    }
+
+    @NonNull
+    protected Supplier<String> isEmptyMessage(@NonNull final Supplier<String> message)
+    {
+        return () -> message.get() + " is empty.";
     }
 
     protected void info(@NonNull final Supplier<?> message)
     {
         if (getLogger().isInfoEnabled())
         {
-            getLogger().info(LoggingOps.MERCENARY_MARKER, message.get().toString());
+            getLogger().info(getMarker(), safe(message.get()));
         }
     }
 
@@ -101,7 +142,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isInfoEnabled())
         {
-            getLogger().info(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
+            getLogger().info(getMarker(), safe(message.get()), cause);
         }
     }
 
@@ -109,7 +150,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isWarnEnabled())
         {
-            getLogger().warn(LoggingOps.MERCENARY_MARKER, message.get().toString());
+            getLogger().warn(getMarker(), safe(message.get()));
         }
     }
 
@@ -117,7 +158,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isWarnEnabled())
         {
-            getLogger().warn(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
+            getLogger().warn(getMarker(), safe(message.get()), cause);
         }
     }
 
@@ -125,7 +166,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isDebugEnabled())
         {
-            getLogger().debug(LoggingOps.MERCENARY_MARKER, message.get().toString());
+            getLogger().debug(getMarker(), safe(message.get()));
         }
     }
 
@@ -133,7 +174,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isDebugEnabled())
         {
-            getLogger().debug(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
+            getLogger().debug(getMarker(), safe(message.get()), cause);
         }
     }
 
@@ -141,7 +182,7 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isErrorEnabled())
         {
-            getLogger().error(LoggingOps.MERCENARY_MARKER, message.get().toString());
+            getLogger().error(getMarker(), safe(message.get()));
         }
     }
 
@@ -149,8 +190,39 @@ public abstract class AbstractMinioAutoConfigureTest
     {
         if (getLogger().isErrorEnabled())
         {
-            getLogger().error(LoggingOps.MERCENARY_MARKER, message.get().toString(), cause);
+            getLogger().error(getMarker(), safe(message.get()), cause);
         }
+    }
+
+    @NonNull
+    protected <T> List<T> forInfo(@NonNull final List<T> list)
+    {
+        if (list.size() > 0)
+        {
+            final Logger logs = getLogger();
+            if (logs.isInfoEnabled())
+            {
+                final Marker mark = getMarker();
+                list.forEach(value -> logs.info(mark, safe(value)));
+            }
+        }
+        return list;
+    }
+
+    @NonNull
+    protected <T> List<T> forInfo(@NonNull final Stream<T> source)
+    {
+        return forInfo(toList(source.filter(MinioUtils::isNonNull)));
+    }
+
+    @NonNull
+    protected String safe(@Nullable final Object value)
+    {
+        if (value instanceof WithJSONOperations)
+        {
+            return toJSONString(value, true);
+        }
+        return MinioUtils.requireNonNullOrElse(((null == value) ? MinioUtils.NULLS_STRING_VALUED : value.toString()), MinioUtils.NULLS_STRING_VALUED);
     }
 
     @NonNull
@@ -198,18 +270,18 @@ public abstract class AbstractMinioAutoConfigureTest
         }
     }
 
-    protected void assertEquals(@Nullable final Object expected, @Nullable final Object actual, @NonNull final Supplier<?> message)
+    protected void assertTrue(final boolean condition, @NonNull final Supplier<String> message)
     {
-        Assertions.assertEquals(expected, actual, () -> message.get().toString());
+        Assertions.assertTrue(condition, message);
     }
 
-    protected void assertTrue(final boolean condition, @NonNull final Supplier<?> message)
+    protected void assertFalse(final boolean condition, @NonNull final Supplier<String> message)
     {
-        Assertions.assertTrue(condition, () -> message.get().toString());
+        Assertions.assertFalse(condition, message);
     }
 
-    protected void assertFalse(final boolean condition, @NonNull final Supplier<?> message)
+    protected void assertEquals(@Nullable final Object expected, @Nullable final Object actual, @NonNull final Supplier<String> message)
     {
-        Assertions.assertFalse(condition, () -> message.get().toString());
+        Assertions.assertEquals(expected, actual, message);
     }
 }

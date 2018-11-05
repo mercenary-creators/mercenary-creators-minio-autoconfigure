@@ -1,5 +1,5 @@
 https://docs.oracle.com/javase/8/docs/api
-https://docs.spring.io/spring/docs/5.1.0.RELEASE/javadoc-api
-https://docs.spring.io/spring-boot/docs/2.1.0.M4/api
+https://docs.spring.io/spring/docs/5.1.2.RELEASE/javadoc-api
+https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/api
 http://minio.github.io/minio-java
 http://docs.themodernway.com/docs/javadoc/mercenary-creators-minio/

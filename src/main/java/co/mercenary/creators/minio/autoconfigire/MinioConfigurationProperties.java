@@ -22,7 +22,7 @@ import org.springframework.lang.Nullable;
 
 import co.mercenary.creators.minio.util.MinioUtils;
 
-@ConfigurationProperties(prefix = "minio")
+@ConfigurationProperties(prefix = "co.mercenary.creators.minio")
 public class MinioConfigurationProperties
 {
     private String server_url;

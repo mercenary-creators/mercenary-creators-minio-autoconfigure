@@ -21,19 +21,16 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
 
-import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTest;
+import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTests;
 import co.mercenary.creators.minio.data.MinioBucket;
 
-@TestPropertySource(properties = "minio.content-type-probe.name=tika")
-public class HasBucketsTest extends AbstractMinioAutoConfigureTest
+@TestPropertySource(properties = "co.mercenary.creators.minio.content-type-probe.name=tika")
+public class HasBucketsTest extends AbstractMinioAutoConfigureTests
 {
     @Test
-    public void test() throws Exception
+    void test() throws Exception
     {
-        final List<MinioBucket> list = toList(getMinioOperations().findBuckets());
-
-        list.forEach(item -> info(() -> toJSONString(item)));
-
-        assertFalse(list.isEmpty(), () -> "bucket isEmpty.");
+        final List<MinioBucket> list = forInfo(getMinio().findBuckets());
+        assertFalse(list.isEmpty(), isEmptyMessage("buckets"));
     }
 }

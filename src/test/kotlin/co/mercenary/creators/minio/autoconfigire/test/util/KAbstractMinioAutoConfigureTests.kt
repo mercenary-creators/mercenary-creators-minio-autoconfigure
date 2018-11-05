@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.minio.autoconfigire.test;
+package co.mercenary.creators.minio.autoconfigire.test.util
 
-import java.util.List;
+import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTests
+import java.util.Optional
 
-import org.junit.jupiter.api.Test;
-
-import co.mercenary.creators.minio.autoconfigire.util.AbstractMinioAutoConfigureTests;
-import co.mercenary.creators.minio.data.MinioItem;
-
-public class HasItemsTest extends AbstractMinioAutoConfigureTests
-{
-    @Test
-    void test() throws Exception
-    {
-        final List<MinioItem> list = forInfo(getMinio().findItems("root", false));
-        assertFalse(list.isEmpty(), isEmptyMessage("items"));
-    }
+abstract class KAbstractMinioAutoConfigureTests : AbstractMinioAutoConfigureTests() {
+	
+	fun <T> Sequence<T>.list(): List<T> = toList()
+	
+	fun <T> Optional<T>.exists(): Boolean = isPresent
+	
+	fun <T> forInfo(sequence: Sequence<T>): List<T> = forInfo(sequence.list())
 }
